@@ -1,38 +1,82 @@
 import { ethers } from "ethers";
+import React, { useState, useEffect } from "react";
+import Web3Modal from "web3modal";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 
-// https://etherscan.io/address/0xcc1b5e2ac4D61cab2755287DB5fc3330F36E0687
-
-// function to Connect Wallet
-let provider = null;
-const connectButton = async () => {
-  const { ethereum } = window;
-  if (ethereum.isMetaMask) {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    const accounts = await provider.send("eth_requestAccounts", []);
-
-    const { name, chainId } = await provider.getNetwork();
-
-    var name = name;
-    var chainId = chainId;
-    var accounts = accounts;
-    // var Balance = await provider.getBalance();
-    var balance = 0.0001;
-    // var balance = (await provider.getBalance()).toString();
-    console.log("balance", balance);
-    return { name, chainId, accounts, balance };
-  } else {
-    return { success: false, msg: "Install MetaMask" };
-  }
+const providerOptions = {
+  metamask: {
+    // Enable MetaMask provider
+    package: null, // No package needed as it is injected automatically
+    options: {
+      rpc: {},
+    },
+  },
+  // coinBase wallet
+  coinbasewallet: {
+    package: CoinbaseWalletSDK, // Coinbase Wallet package name
+    options: {
+      rpc: {},
+    },
+  },
+  // wallet Connect wallet
+  walletconnect: {
+    package: WalletConnectProvider,
+    options: {
+      rpc: {},
+    },
+  },
 };
 
-//  function to diConnect Wallet
+var signer;
+// connect wallet
+const walletConnectionFun = () => {
+  const [web3Modal, setWeb3Modal] = useState({});
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const web3modal = new Web3Modal({
+        network: "goerli", // optional
+        cacheProvider: true, // optional
+        providerOptions, // required
+      });
+      setWeb3Modal(web3modal);
+    }
+  }, []);
 
-const diConnectWallet = () => {
-  provider = null;
-  var name = "";
-  var chainId = "";
-  var accounts = "";
-  var Balance = 0;
-  return { name, chainId, accounts, Balance };
+  const connectWlt = async () => {
+    try {
+      const provider = await web3Modal.connect();
+      const instance = new ethers.providers.Web3Provider(provider);
+      console.log("this is sinstane", instance);
+      var network = await instance.getNetwork();
+      network = network.chainId;
+      signer = instance.getSigner();
+      const address = await signer.getAddress();
+      console.log("address ", address);
+      var balance = (await signer.getBalance()).toString();
+      balance = ethers.utils.formatEther(balance);
+      console.log("balance ", balance);
+
+      return {
+        success: true,
+        balance,
+        account: address,
+        network,
+      };
+    } catch (err) {
+      console.log(err);
+      return { success: false };
+    }
+  };
+
+  // this function used to diconnect Walelt
+  const disConnectWallet = async () => {
+    await web3Modal.clearCachedProvider();
+    signer = null;
+    console.log("you want to dicsonnect Wallet");
+  };
+
+  return { connectWlt, disConnectWallet };
 };
-export { connectButton, diConnectWallet };
+
+export { walletConnectionFun };

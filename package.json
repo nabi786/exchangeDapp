@@ -9,17 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@coinbase/wallet-sdk": "^3.6.6",
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
     "@mui/icons-material": "^5.11.16",
     "@mui/system": "^5.12.3",
     "@truffle/hdwallet-provider": "^2.1.10",
+    "@trustwallet/wallet-core": "^3.1.31",
+    "@walletconnect/web3-provider": "^1.8.0",
     "dotenv": "^16.0.3",
     "ethers": "^5.6.9",
     "next": "13.3.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "web3": "^1.9.0",
-    "web3modal": "^1.9.12"
+    "web3modal": "^1.9.9"
   }
 }
