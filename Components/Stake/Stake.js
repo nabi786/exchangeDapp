@@ -10,6 +10,8 @@ import { useTheme } from "@mui/material/styles";
 import { TextField } from "@mui/material";
 import { styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import AppContext from "@/Config/AppContext";
+import { useContext } from "react";
 
 const CssTextField = styled(TextField)({
   // marginTop: '10px',
@@ -52,6 +54,9 @@ const Stake = () => {
   let theme = useTheme();
   const [percentage, setPercentage] = useState("0.5");
   const [amount, setAmount] = useState("");
+
+  const walletConfig = useContext(AppContext);
+
   return (
     <Box
       sx={{
@@ -253,10 +258,13 @@ const Stake = () => {
             >
               Total Staked: 0 WIX
             </Typography>
+
             <Typography
               sx={{ color: theme.palette.background.navBarBtnSecondaryColor }}
             >
-              My Balance: 0 WIX
+              {walletConfig?.balanceContext != ""
+                ? `My Balance: ${walletConfig?.balanceContext} WIX`
+                : "My Balance: 0 WIX"}
             </Typography>
           </Box>
           <Box>

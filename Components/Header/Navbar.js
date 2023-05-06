@@ -6,7 +6,10 @@ import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Menu, MenuItem } from "@mui/material";
 import CancelPresentationOutlinedIcon from "@mui/icons-material/CancelPresentationOutlined";
-import { connectButton } from "../../blockChain/instance";
+import { connectButton, diConnectWallet } from "../../blockChain/instance";
+import { useContext } from "react";
+import AppContext from "@/Config/AppContext";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const CustomMenu = styled(Menu)(({ theme = useTheme() }) => ({
   "& 	.css-1ka5eyc-MuiPaper-root-MuiMenu-paper-MuiPopover-paper": {
@@ -33,6 +36,8 @@ const Navbar = () => {
 
   const [openMenu, setOpenMenu] = useState(false);
 
+  const walletConfig = useContext(AppContext);
+
   const handleClose = () => {
     setOpenMenu(false);
   };
@@ -42,6 +47,16 @@ const Navbar = () => {
   var connectWalletBtn = async () => {
     var result = await connectButton();
     console.log("this is result", result);
+    walletConfig.setWalletAddressContext(result?.accounts[0]);
+    walletConfig.setBalanceContext(result?.balance);
+  };
+
+  // function to disconnect wallet
+
+  const disConnectWallet = () => {
+    diConnectWallet();
+    walletConfig.setWalletAddressContext("");
+    walletConfig.setBalanceContext("");
   };
 
   return (
@@ -169,24 +184,55 @@ const Navbar = () => {
               pr: "70px",
             }}
           >
-            <Button
-              variant="outlined"
-              size="large"
-              sx={{
-                textTransform: "capitalize",
-                color: theme.palette.background.default,
-                borderColor: theme.palette.background.navBarBtnStyledColor,
-                "&:hover": {
-                  backgroundColor:
-                    theme.palette.background.navBarBtnStyledColor,
-                  color: theme.palette.background.navbarBg,
-                },
-                borderRadius: "20px",
-              }}
-              onClick={connectWalletBtn}
-            >
-              Connect Wallet
-            </Button>
+            {walletConfig.walletAddressContext != "" ? (
+              <Button
+                variant="outlined"
+                size="large"
+                sx={{
+                  textTransform: "capitalize",
+                  color: theme.palette.background.default,
+                  borderColor: theme.palette.background.navBarBtnStyledColor,
+                  "&:hover": {
+                    backgroundColor:
+                      theme.palette.background.navBarBtnStyledColor,
+                    color: theme.palette.background.navbarBg,
+                  },
+                  borderRadius: "20px",
+                }}
+                startIcon={<LogoutIcon />}
+                onClick={disConnectWallet}
+              >
+                <span
+                  style={{
+                    width: "150px",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {walletConfig.walletAddressContext}
+                </span>
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                size="large"
+                sx={{
+                  textTransform: "capitalize",
+                  color: theme.palette.background.default,
+                  borderColor: theme.palette.background.navBarBtnStyledColor,
+                  "&:hover": {
+                    backgroundColor:
+                      theme.palette.background.navBarBtnStyledColor,
+                    color: theme.palette.background.navbarBg,
+                  },
+                  borderRadius: "20px",
+                }}
+                onClick={connectWalletBtn}
+              >
+                Connect Wallet
+              </Button>
+            )}
           </Box>
         </Box>
 
