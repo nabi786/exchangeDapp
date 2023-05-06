@@ -6,6 +6,7 @@ import Image from "next/image";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Menu, MenuItem } from "@mui/material";
 import CancelPresentationOutlinedIcon from "@mui/icons-material/CancelPresentationOutlined";
+import { connectButton } from "../../blockChain/instance";
 
 const CustomMenu = styled(Menu)(({ theme = useTheme() }) => ({
   "& 	.css-1ka5eyc-MuiPaper-root-MuiMenu-paper-MuiPopover-paper": {
@@ -34,6 +35,13 @@ const Navbar = () => {
 
   const handleClose = () => {
     setOpenMenu(false);
+  };
+
+  // function to connect Wallet
+
+  var connectWalletBtn = async () => {
+    var result = await connectButton();
+    console.log("this is result", result);
   };
 
   return (
@@ -175,8 +183,9 @@ const Navbar = () => {
                 },
                 borderRadius: "20px",
               }}
+              onClick={connectWalletBtn}
             >
-              Enter App
+              Connect Wallet
             </Button>
           </Box>
         </Box>
