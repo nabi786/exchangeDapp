@@ -5,14 +5,14 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { TextField } from "@mui/material";
 import { styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AppContext from "@/Config/AppContext";
 import { useContext } from "react";
-
+import {StakeWIXFun} from '../../blockChain/controler'
 const CssTextField = styled(TextField)({
   // marginTop: '10px',
   height: "50px",
@@ -54,8 +54,67 @@ const Stake = () => {
   let theme = useTheme();
   const [percentage, setPercentage] = useState("0.5");
   const [amount, setAmount] = useState("");
-
+  const [error, setError] = useState("");
+  const [successMsg, setSuccessMSG] = useState("");
   const walletConfig = useContext(AppContext);
+  const [plan,setPlan] = useState(1)
+
+
+
+
+
+  var { stakeWix  , unStakeBeforeTimeFun , getStakedDetails} = StakeWIXFun()
+
+  useEffect(()=>{
+
+    const getStakedData = async ()=>{
+      var result = await getStakedDetails()
+    }
+    getStakedData()
+  },[walletConfig.walletAddressContext])
+
+
+  // buttion to stack Wix
+  const stakeWIXBTN = async ()=>{
+    console.log('this is ContextApi', walletConfig.walletAddressContext)
+    setError("")
+    setSuccessMSG("")
+    var isWalletConnected = false
+    if(walletConfig.walletAddressContext != ""){
+      var result = await stakeWix(true , amount , plan)
+      console.log("result",result )
+      if(result.success){
+        setSuccessMSG(result.msg)
+        setPlan(0)
+      }else{
+        setError(result.msg)
+      }
+
+    }else{
+      setError("Connect Wallet First")
+    }
+  }
+
+
+  //  unstake before time 
+
+  const unStakeBeforeTime = async()=>{
+
+    setError("")
+    setSuccessMSG("")
+    var result = await unStakeBeforeTimeFun(plan)
+
+    if(result.success == true){
+      setSuccessMSG(result.msg)
+    }else{
+      setError(result.msg)
+    }
+  }
+
+
+  const reStakeProfit = ()=>{
+    console.log('reStake proffilt')
+  }
 
   return (
     <Box
@@ -113,7 +172,7 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPercentage("0.5")}
+            onClick={() => setPlan(1)}
           >
             7 Days
           </Button>
@@ -137,7 +196,7 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPercentage("1")}
+            onClick={() => setPlan(2)}
           >
             14 Days
           </Button>
@@ -161,7 +220,7 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPercentage("3")}
+            onClick={() => setPlan(3)}
           >
             30 Days
           </Button>
@@ -185,7 +244,7 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPercentage("5")}
+            onClick={() => setPlan(4)}
           >
             60 Days
           </Button>
@@ -209,7 +268,7 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPercentage("8")}
+            onClick={() => setPlan(5)}
           >
             90 Days
           </Button>
@@ -233,7 +292,7 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPercentage("15")}
+            onClick={() => setPlan(6)}
           >
             180 Days
           </Button>
@@ -341,10 +400,16 @@ const Stake = () => {
                 },
               }}
               size="large"
+
+              onClick = {stakeWIXBTN}
             >
               Stake
             </Button>
           </Box>
+        </Box>
+        <Box>
+          <Typography sx={{fontSize : "13px", color : "red", textAlign : "center",textTransform : "uppercase"}}>{error}</Typography>
+          <Typography sx={{fontSize : "13px", color : "white", textAlign : "center",textTransform : "uppercase"}}>{successMsg}</Typography>
         </Box>
         <Box
           sx={{
@@ -368,8 +433,10 @@ const Stake = () => {
               },
             }}
             size="large"
+
+            onClick = {unStakeBeforeTime}
           >
-            Unstake after time period
+            Unstake before time period
           </Button>
 
           <Button
@@ -387,8 +454,10 @@ const Stake = () => {
               },
             }}
             size="large"
+
+            onClick = {reStakeProfit}
           >
-            Rewards
+            Restake Profit
           </Button>
         </Box>
       </Box>

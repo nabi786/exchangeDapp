@@ -48,7 +48,7 @@ const Navbar = () => {
     var result = await connectWlt();
     console.log("this is result", result);
     if (result.success == true) {
-      walletConfig.setWalletAddressContext(result?.accounts);
+      walletConfig.setWalletAddressContext(result?.account);
       walletConfig.setBalanceContext(result?.balance);
     }
   };
