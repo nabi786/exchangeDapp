@@ -61,6 +61,11 @@ const Navbar = () => {
     walletConfig.setBalanceContext("");
   };
 
+  console.log(
+    "walletConfig.walletAddressContext",
+    walletConfig.walletAddressContext
+  );
+
   return (
     <Box>
       <Box
@@ -282,6 +287,32 @@ const Navbar = () => {
             onClose={handleClose}
             onClick={handleClose}
           >
+            {walletConfig.walletAddressContext != "" ? (
+              <MenuItem
+                sx={{
+                  // width: "100vw",
+                  // color: theme.palette.background.navBarBtnSecondaryColor,
+                  color: theme.palette.background.default,
+                }}
+                onClick={disConnectWalletBTN}
+              >
+                {walletConfig.walletAddressContext}
+              </MenuItem>
+            ) : (
+              <MenuItem
+                sx={{
+                  // width: "100vw",
+                  // color: theme.palette.background.navBarBtnSecondaryColor,
+                  color: theme.palette.background.default,
+                }}
+                onClick={connectWalletBtn}
+              >
+                Connect Wallet
+              </MenuItem>
+            )}
+            <Divider
+              sx={{ backgroundColor: theme.palette.background.default }}
+            />
             <MenuItem
               sx={{
                 // width: "100vw",
