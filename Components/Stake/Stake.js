@@ -58,6 +58,7 @@ const Stake = () => {
   const [successMsg, setSuccessMSG] = useState("");
   const walletConfig = useContext(AppContext);
   const [plan,setPlan] = useState(1)
+  // const [youStackedWix,setYouStackedWix] = useState(0)
 
 
 
@@ -68,10 +69,15 @@ const Stake = () => {
   useEffect(()=>{
 
     const getStakedData = async ()=>{
-      var result = await getStakedDetails()
+      console.log("this is plan ", plan)
+      var result = await getStakedDetails(6)
+      console.log('this is result0087 ', result)
     }
     getStakedData()
   },[walletConfig.walletAddressContext])
+
+  
+
 
 
   // buttion to stack Wix
@@ -172,7 +178,7 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPlan(1)}
+            onClick={() => setPlan(1) }
           >
             7 Days
           </Button>

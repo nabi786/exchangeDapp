@@ -102,6 +102,7 @@ const StakeWIXFun = () => {
 
 
 
+      // totalStakedOfPlan1Apy function 
       console.log("this isplna to unStake", plan_to_unstake)
       
 
@@ -132,9 +133,120 @@ const StakeWIXFun = () => {
 
   // get Staked WIX Detials
 
-  const getStakedDetails = async () => {
+  // ======================Get Stacked Detials===========================//
+  // ======================Get Stacked Detials===========================//
+  // ======================Get Stacked Detials===========================//
+  // ======================Get Stacked Detials===========================//
+  const getStakedDetails = async (plan) => {
     try {
+
+      var { contract_instance, wixContract_instance } = await Contract(true);
+
+      // console.log("this plan ", plan)
+      var plan_to_unstake = ""
+      var yourStackedTokens = 0
+      var totalStacked = 0
+      var myBalance = 0
+      var get_apy = 0
       
+      // get address 
+      var address = await signer.getAddress();
+      if(plan == 1){
+        plan_to_unstake = (await contract_instance.Plan1()).toString()
+       
+        yourStackedTokens = (await contract_instance.stakingBalancePlan1(address)).toString()
+        yourStackedTokens = ethers.utils.formatEther(yourStackedTokens);
+
+        totalStacked = (await contract_instance.totalStakedOfPlan1()).toString()
+        totalStacked = ethers.utils.formatEther(totalStacked);
+
+        myBalance = (await wixContract_instance.balanceOf(address)).toString()
+        myBalance = ethers.utils.formatEther(myBalance);
+        
+        get_apy = (await contract_instance.totalStakedOfPlan1Apy()).toString()
+        
+
+      }else if (plan == 2){
+        plan_to_unstake = (await contract_instance.Plan2()).toString()
+
+        yourStackedTokens = (await contract_instance.stakingBalancePlan2(address)).toString()
+        yourStackedTokens = ethers.utils.formatEther(yourStackedTokens);
+
+        totalStacked = (await contract_instance.totalStakedOfPlan2()).toString()
+        totalStacked = ethers.utils.formatEther(totalStacked);
+
+        myBalance = (await wixContract_instance.balanceOf(address)).toString()
+        myBalance = ethers.utils.formatEther(myBalance);
+        
+        get_apy = (await contract_instance.totalStakedOfPlan2Apy()).toString()
+        
+      }else if (plan == 3){
+        plan_to_unstake = (await contract_instance.Plan3()).toString()
+
+
+        yourStackedTokens = (await contract_instance.stakingBalancePlan3(address)).toString()
+        yourStackedTokens = ethers.utils.formatEther(yourStackedTokens);
+
+        totalStacked = (await contract_instance.totalStakedOfPlan3()).toString()
+        totalStacked = ethers.utils.formatEther(totalStacked);
+
+        myBalance = (await wixContract_instance.balanceOf(address)).toString()
+        myBalance = ethers.utils.formatEther(myBalance);
+        
+        get_apy = (await contract_instance.totalStakedOfPlan3Apy()).toString()
+
+        
+      }else if (plan == 4){
+        plan_to_unstake = (await contract_instance.Plan4()).toString()
+
+
+        yourStackedTokens = (await contract_instance.stakingBalancePlan4(address)).toString()
+        yourStackedTokens = ethers.utils.formatEther(yourStackedTokens);
+
+        totalStacked = (await contract_instance.totalStakedOfPlan4()).toString()
+        totalStacked = ethers.utils.formatEther(totalStacked);
+
+        myBalance = (await wixContract_instance.balanceOf(address)).toString()
+        myBalance = ethers.utils.formatEther(myBalance);
+        
+        get_apy = (await contract_instance.totalStakedOfPlan4Apy()).toString()
+        
+      }else if (plan == 5){
+        plan_to_unstake = (await contract_instance.Plan5()).toString()
+
+
+        yourStackedTokens = (await contract_instance.stakingBalancePlan5(address)).toString()
+        yourStackedTokens = ethers.utils.formatEther(yourStackedTokens);
+
+        totalStacked = (await contract_instance.totalStakedOfPlan5()).toString()
+        totalStacked = ethers.utils.formatEther(totalStacked);
+
+        myBalance = (await wixContract_instance.balanceOf(address)).toString()
+        myBalance = ethers.utils.formatEther(myBalance);
+        
+        get_apy = (await contract_instance.totalStakedOfPlan5Apy()).toString()
+        
+      }else if (plan == 6){
+        plan_to_unstake = (await contract_instance.Plan6()).toString()
+
+
+        yourStackedTokens = (await contract_instance.stakingBalancePlan6(address)).toString()
+        yourStackedTokens = ethers.utils.formatEther(yourStackedTokens);
+
+        totalStacked = (await contract_instance.totalStakedOfPlan6()).toString()
+        totalStacked = ethers.utils.formatEther(totalStacked);
+
+        myBalance = (await wixContract_instance.balanceOf(address)).toString()
+        myBalance = ethers.utils.formatEther(myBalance);
+        
+        get_apy = (await contract_instance.totalStakedOfPlan6Apy()).toString()
+      }
+
+
+
+      
+
+      return {totalStacked , myBalance , get_apy}
     } catch (err) {
       console.log("erro ", err)
     }
@@ -142,5 +254,12 @@ const StakeWIXFun = () => {
 
   return { stakeWix, unStakeBeforeTimeFun, getStakedDetails };
 };
+
+
+
+
+
+
+
 
 export { StakeWIXFun };
