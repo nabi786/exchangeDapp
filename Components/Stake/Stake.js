@@ -5,14 +5,14 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import { TextField } from "@mui/material";
 import { styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import AppContext from "@/Config/AppContext";
 import { useContext } from "react";
-import {StakeWIXFun} from '../../blockChain/controler'
+import { StakeWIXFun } from "../../blockChain/controler";
 const CssTextField = styled(TextField)({
   // marginTop: '10px',
   height: "50px",
@@ -57,70 +57,67 @@ const Stake = () => {
   const [error, setError] = useState("");
   const [successMsg, setSuccessMSG] = useState("");
   const walletConfig = useContext(AppContext);
-  const [plan,setPlan] = useState(1)
+  const [plan, setPlan] = useState(1);
+  const [toggleColor, setToggleColor] = useState(false);
   // const [youStackedWix,setYouStackedWix] = useState(0)
 
-
-
-
-
-  var { stakeWix  , unStakeBeforeTimeFun , getStakedDetails} = StakeWIXFun()
-
-  useEffect(()=>{
-
-    const getStakedData = async ()=>{
-      console.log("this is plan ", plan)
-      var result = await getStakedDetails(6)
-      console.log('this is result0087 ', result)
+  const handleColor = () => {
+    if (plan >= 1) {
+      setToggleColor(true);
     }
-    getStakedData()
-  },[walletConfig.walletAddressContext])
+  };
 
-  
+  var { stakeWix, unStakeBeforeTimeFun, getStakedDetails } = StakeWIXFun();
 
-
+  useEffect(() => {
+    const getStakedData = async () => {
+      console.log("this is plan ", plan);
+      var result = await getStakedDetails(6);
+      console.log("this is result0087 ", result);
+      walletConfig.setStackedContext(result);
+    };
+    getStakedData();
+  }, [walletConfig.walletAddressContext]);
 
   // buttion to stack Wix
-  const stakeWIXBTN = async ()=>{
-    console.log('this is ContextApi', walletConfig.walletAddressContext)
-    setError("")
-    setSuccessMSG("")
-    var isWalletConnected = false
-    if(walletConfig.walletAddressContext != ""){
-      var result = await stakeWix(true , amount , plan)
-      console.log("result",result )
-      if(result.success){
-        setSuccessMSG(result.msg)
-        setPlan(0)
-      }else{
-        setError(result.msg)
+  const stakeWIXBTN = async () => {
+    console.log("this is ContextApi", walletConfig.walletAddressContext);
+    setError("");
+    setSuccessMSG("");
+    var isWalletConnected = false;
+    if (walletConfig.walletAddressContext != "") {
+      var result = await stakeWix(true, amount, plan);
+      console.log("result", result);
+      if (result.success) {
+        setSuccessMSG(result.msg);
+        setPlan(0);
+      } else {
+        setError(result.msg);
       }
-
-    }else{
-      setError("Connect Wallet First")
+    } else {
+      setError("Connect Wallet First");
     }
-  }
+  };
 
+  //  unstake before time
 
-  //  unstake before time 
+  const unStakeBeforeTime = async () => {
+    setError("");
+    setSuccessMSG("");
+    var result = await unStakeBeforeTimeFun(plan);
 
-  const unStakeBeforeTime = async()=>{
-
-    setError("")
-    setSuccessMSG("")
-    var result = await unStakeBeforeTimeFun(plan)
-
-    if(result.success == true){
-      setSuccessMSG(result.msg)
-    }else{
-      setError(result.msg)
+    if (result.success == true) {
+      setSuccessMSG(result.msg);
+    } else {
+      setError(result.msg);
     }
-  }
+  };
 
+  const reStakeProfit = () => {
+    console.log("reStake proffilt");
+  };
 
-  const reStakeProfit = ()=>{
-    console.log('reStake proffilt')
-  }
+  console.log("StackedValue", walletConfig.StackedContext);
 
   return (
     <Box
@@ -146,7 +143,11 @@ const Stake = () => {
               textAlign: "center",
             }}
           >
-            Stake WIX Token & get upto 15% APY
+            Stake WIX Token & get upto{" "}
+            {walletConfig?.StackedContext
+              ? walletConfig?.StackedContext?.get_apy
+              : "0.0"}{" "}
+            APY
           </Typography>
         </Box>
         <Box
@@ -161,8 +162,14 @@ const Stake = () => {
           <Button
             variant="contained"
             sx={{
-              background: "transparent",
-              border: `1px solid ${theme.palette.background.navBarBtnStyledColor}`,
+              // background: "transparent",
+              background: toggleColor
+                ? "transparent"
+                : theme.palette.background.gradientColor,
+              border: toggleColor
+                ? `1px solid ${theme.palette.background.navBarBtnStyledColor}`
+                : "none",
+              // border: `1px solid ${theme.palette.background.navBarBtnStyledColor}`,
               color: theme.palette.background.default,
               textTransform: "capitalize",
               "&:focus": {
@@ -178,7 +185,7 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPlan(1) }
+            onClick={() => setPlan(1)}
           >
             7 Days
           </Button>
@@ -202,7 +209,10 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPlan(2)}
+            onClick={() => {
+              setPlan(2);
+              handleColor();
+            }}
           >
             14 Days
           </Button>
@@ -226,7 +236,10 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPlan(3)}
+            onClick={() => {
+              setPlan(3);
+              handleColor();
+            }}
           >
             30 Days
           </Button>
@@ -250,7 +263,10 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPlan(4)}
+            onClick={() => {
+              setPlan(4);
+              handleColor();
+            }}
           >
             60 Days
           </Button>
@@ -274,7 +290,10 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPlan(5)}
+            onClick={() => {
+              setPlan(5);
+              handleColor();
+            }}
           >
             90 Days
           </Button>
@@ -298,7 +317,10 @@ const Stake = () => {
                 color: theme.palette.background.navbarBg,
               },
             }}
-            onClick={() => setPlan(6)}
+            onClick={() => {
+              setPlan(6);
+              handleColor();
+            }}
           >
             180 Days
           </Button>
@@ -316,7 +338,10 @@ const Stake = () => {
             <Typography
               sx={{ color: theme.palette.background.navBarBtnSecondaryColor }}
             >
-              Your Staked WIX: 0 WIX
+              Your Staked WIX:{" "}
+              {walletConfig?.StackedContext
+                ? `${walletConfig?.StackedContext?.totalStacked} WIX`
+                : "0 WIX"}
             </Typography>
             <Typography
               sx={{ color: theme.palette.background.navBarBtnSecondaryColor }}
@@ -341,7 +366,9 @@ const Stake = () => {
                 color: theme.palette.background.navBarBtnSecondaryColor,
               }}
             >
-              {percentage}%
+              {walletConfig?.StackedContext
+                ? walletConfig?.StackedContext?.get_apy
+                : "0.0"}
             </Typography>
             <Typography
               sx={{
@@ -406,16 +433,33 @@ const Stake = () => {
                 },
               }}
               size="large"
-
-              onClick = {stakeWIXBTN}
+              onClick={stakeWIXBTN}
             >
               Stake
             </Button>
           </Box>
         </Box>
         <Box>
-          <Typography sx={{fontSize : "13px", color : "red", textAlign : "center",textTransform : "uppercase"}}>{error}</Typography>
-          <Typography sx={{fontSize : "13px", color : "white", textAlign : "center",textTransform : "uppercase"}}>{successMsg}</Typography>
+          <Typography
+            sx={{
+              fontSize: "13px",
+              color: "red",
+              textAlign: "center",
+              textTransform: "uppercase",
+            }}
+          >
+            {error}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: "13px",
+              color: "white",
+              textAlign: "center",
+              textTransform: "uppercase",
+            }}
+          >
+            {successMsg}
+          </Typography>
         </Box>
         <Box
           sx={{
@@ -439,13 +483,12 @@ const Stake = () => {
               },
             }}
             size="large"
-
-            onClick = {unStakeBeforeTime}
+            onClick={unStakeBeforeTime}
           >
             Unstake before time period
           </Button>
 
-          <Button
+          {/* <Button
             variant="contained"
             sx={{
               background: theme.palette.background.gradientColor,
@@ -460,11 +503,10 @@ const Stake = () => {
               },
             }}
             size="large"
-
-            onClick = {reStakeProfit}
+            onClick={reStakeProfit}
           >
             Restake Profit
-          </Button>
+          </Button> */}
         </Box>
       </Box>
       <Box>

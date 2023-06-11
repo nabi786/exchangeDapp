@@ -6,12 +6,15 @@ import AppContext from "@/Config/AppContext";
 export default function App({ Component, pageProps }) {
   const [walletAddress, setWalletAddress] = useState("");
   const [balance, setBalance] = useState("");
+  const [Stacked, setStacked] = useState("");
 
   const contextObject = {
     walletAddressContext: walletAddress,
     setWalletAddressContext: setWalletAddress,
     balanceContext: balance,
     setBalanceContext: setBalance,
+    setStackedContext: setStacked,
+    StackedContext: Stacked,
   };
 
   return (
