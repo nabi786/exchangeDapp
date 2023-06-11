@@ -246,7 +246,7 @@ const StakeWIXFun = () => {
 
       
 
-      return {totalStacked , myBalance , get_apy}
+      return {totalStacked , myBalance , get_apy , yourStackedTokens}
     } catch (err) {
       console.log("erro ", err)
     }
