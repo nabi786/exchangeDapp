@@ -77,7 +77,8 @@ const Stake = () => {
       walletConfig.setStackedContext(result);
     };
     getStakedData();
-  }, [walletConfig.walletAddressContext]);
+    console.log("UseffectRunning");
+  }, [walletConfig.walletAddressContext, plan]);
 
   // buttion to stack Wix
   const stakeWIXBTN = async () => {
