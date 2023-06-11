@@ -361,9 +361,13 @@ const Stake = () => {
             <Typography
               sx={{ color: theme.palette.background.navBarBtnSecondaryColor }}
             >
-              {walletConfig?.balanceContext != ""
+              My Balance : {" "}
+              {walletConfig?.StackedContext
+                ? `${walletConfig?.StackedContext?.myBalance} WIX`
+                : "0 WIX"}
+              {/* {walletConfig?.balanceContext != ""
                 ? `My Balance: ${walletConfig?.balanceContext} WIX`
-                : "My Balance: 0 WIX"}
+                : "My Balance: 0 WIX"} */}
             </Typography>
           </Box>
           <Box>
