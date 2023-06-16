@@ -31,14 +31,14 @@ const providerOptions = {
   coinbasewallet: {
     package: CoinbaseWalletSDK, // Coinbase Wallet package name
     options: {
-      rpc: {  5: process.env.NEXT_PUBLIC_INFURA_ID, },
+      // rpc: {  5: process.env.NEXT_PUBLIC_INFURA_ID, },
     },
   },
   // wallet Connect wallet
   walletconnect: {
     package: WalletConnectProvider,
     options: {
-      rpc: {  5: process.env.NEXT_PUBLIC_INFURA_ID, },
+      // rpc: {  5: process.env.NEXT_PUBLIC_INFURA_ID, },
     },
   },
 };
