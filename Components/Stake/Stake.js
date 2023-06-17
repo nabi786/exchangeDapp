@@ -79,7 +79,7 @@ const Stake = () => {
     };
     getStakedData();
     console.log("UseffectRunning");
-  }, [walletConfig.walletAddressContext, plan,isSuccess]);
+  }, [walletConfig.walletAddressContext, plan, isSuccess]);
 
   // buttion to stack Wix
   const stakeWIXBTN = async () => {
@@ -91,10 +91,10 @@ const Stake = () => {
       var result = await stakeWix(true, amount, plan);
       if (result.success) {
         console.log("result", result);
-        setTimeout(()=>{
-          setSuccess(!isSuccess)
-        },8000)
-        console.log("staked Successfully")
+        setTimeout(() => {
+          setSuccess(!isSuccess);
+        }, 8000);
+        console.log("staked Successfully");
         setSuccessMSG(result.msg);
         setPlan(1);
       } else {
@@ -150,10 +150,10 @@ const Stake = () => {
             }}
           >
             Stake WIX Token & get upto{" "}
-            {walletConfig?.StackedContext
+            {/* {walletConfig?.StackedContext
               ? walletConfig?.StackedContext?.get_apy
-              : "0.0"}{" "}
-            APY
+              : "0.0"}{" "} */}
+            {walletConfig?.StackedContext ? "0,5%" : "0.0"} APY
           </Typography>
         </Box>
         <Box
@@ -352,7 +352,7 @@ const Stake = () => {
             <Typography
               sx={{ color: theme.palette.background.navBarBtnSecondaryColor }}
             >
-              Total Staked: {" "}
+              Total Staked:{" "}
               {walletConfig?.StackedContext
                 ? `${walletConfig?.StackedContext?.totalStacked} WIX`
                 : "0 WIX"}
@@ -361,7 +361,7 @@ const Stake = () => {
             <Typography
               sx={{ color: theme.palette.background.navBarBtnSecondaryColor }}
             >
-              My Balance : {" "}
+              My Balance :{" "}
               {walletConfig?.StackedContext
                 ? `${walletConfig?.StackedContext?.myBalance} WIX`
                 : "0 WIX"}
@@ -379,9 +379,10 @@ const Stake = () => {
                 color: theme.palette.background.navBarBtnSecondaryColor,
               }}
             >
-              {walletConfig?.StackedContext
+              {/* {walletConfig?.StackedContext
                 ? walletConfig?.StackedContext?.get_apy
-                : "0.0"}
+                : "0.0"} */}
+              {walletConfig?.StackedContext ? "0,5%" : "0.0"}
             </Typography>
             <Typography
               sx={{
