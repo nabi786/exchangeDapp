@@ -13,6 +13,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AppContext from "@/Config/AppContext";
 import { useContext } from "react";
 import { StakeWIXFun } from "../../blockChain/controler";
+import moment from "moment";
 const CssTextField = styled(TextField)({
   // marginTop: '10px',
   height: "50px",
@@ -60,6 +61,10 @@ const Stake = () => {
   const [plan, setPlan] = useState(1);
   const [toggleColor, setToggleColor] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
+  const [newDate, setnewDate] = useState("");
+  var localDate = 0;
+  var dateFormat = "YYYY-DD-MM HH:mm";
+  // let newDate = 0;
   // const [youStackedWix,setYouStackedWix] = useState(0)
 
   const handleColor = () => {
@@ -76,6 +81,10 @@ const Stake = () => {
       var result = await getStakedDetails(plan);
       console.log("this is result0087 ", result);
       walletConfig.setStackedContext(result);
+
+      var testDateUtc = moment.utc(Number(result?.stakingTime) * 1000);
+      localDate = testDateUtc.local();
+      setnewDate(localDate.format(dateFormat));
     };
     getStakedData();
     console.log("UseffectRunning");
@@ -123,6 +132,8 @@ const Stake = () => {
     console.log("reStake proffilt");
   };
 
+  console.log("NewDate", newDate);
+
   console.log("StackedValue", walletConfig.StackedContext);
 
   return (
@@ -153,7 +164,16 @@ const Stake = () => {
             {/* {walletConfig?.StackedContext
               ? walletConfig?.StackedContext?.get_apy
               : "0.0"}{" "} */}
-            {walletConfig?.StackedContext ? "0,5%" : "0.0"} APY
+            {walletConfig?.StackedContext ? (
+              <>
+                {walletConfig?.StackedContext && plan == 1
+                  ? "0,5%"
+                  : `${walletConfig?.StackedContext?.get_apy}%`}
+              </>
+            ) : (
+              "0.0"
+            )}{" "}
+            APY
           </Typography>
         </Box>
         <Box
@@ -369,6 +389,14 @@ const Stake = () => {
                 ? `My Balance: ${walletConfig?.balanceContext} WIX`
                 : "My Balance: 0 WIX"} */}
             </Typography>
+            <Typography
+              sx={{ color: theme.palette.background.navBarBtnSecondaryColor }}
+            >
+              Last Stake :{" "}
+              {walletConfig?.StackedContext?.stakingTime > 0
+                ? newDate
+                : "YYYY-DD-MM HH:mm"}
+            </Typography>
           </Box>
           <Box>
             <Typography
@@ -379,10 +407,15 @@ const Stake = () => {
                 color: theme.palette.background.navBarBtnSecondaryColor,
               }}
             >
-              {/* {walletConfig?.StackedContext
-                ? walletConfig?.StackedContext?.get_apy
-                : "0.0"} */}
-              {walletConfig?.StackedContext ? "0,5%" : "0.0"}
+              {walletConfig?.StackedContext ? (
+                <>
+                  {walletConfig?.StackedContext && plan == 1
+                    ? "0,5%"
+                    : `${walletConfig?.StackedContext?.get_apy}%`}
+                </>
+              ) : (
+                "0.0"
+              )}
             </Typography>
             <Typography
               sx={{
