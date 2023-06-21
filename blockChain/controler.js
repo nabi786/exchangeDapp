@@ -265,6 +265,11 @@ const StakeWIXFun = () => {
         ).toString();
       }
 
+
+      
+    get_apy = get_apy.toString().replace(/(\.\d*?[1-9])0+$/g, '$1');
+
+
       return {
         totalStacked,
         myBalance,
