@@ -266,8 +266,9 @@ const StakeWIXFun = () => {
       }
 
 
-      
-    get_apy = get_apy.toString().replace(/(\.\d*?[1-9])0+$/g, '$1');
+    if(get_apy != 0){
+        get_apy = get_apy.toString().replace(/(\.\d*?[1-9])0+$/g, '$1');
+    } 
 
 
       return {
